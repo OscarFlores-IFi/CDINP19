@@ -35,7 +35,9 @@ datan[datan<3] = 0
 datan[datan>=3] = 1
 
 #%% Calcular distancias de indices de similitud
-D1 = sc.pdist(datan,'hamming') # hamming == matching
+#D1 = sc.pdist(datan,'hamming') # hamming == matching
+D1 = sc.pdist(datan,'jaccard')
+
 D1 = sc.squareform(D1)
 
 #D2 = sc.pdist(data_b,'jaccard') # hamming == matching
@@ -43,7 +45,7 @@ D1 = sc.squareform(D1)
 
 Isim1 = 1-D1
 #%% Seleccionar usuario y determinar sus parecidos 
-user = 13
+user = 1
 Isim_user = Isim1[user]
 Isim_user_sort = np.sort(Isim_user)
 indx_user = np.argsort(Isim_user)
@@ -55,9 +57,14 @@ USER_sim = datan.loc[indx_user[-2]]
 indx_recomend1 = (USER_sim==1)&(USER==0)
 recomend1 = list(USER.index[indx_recomend1])
 
+#%% Recomendación peliculas p2. 
+USER = datan.loc[user]
+USER_sim = np.mean(datan.loc[indx_user[-6:-1]],axis = 0)
+USER_sim[USER_sim<=.5]=0
+USER_sim[USER_sim>.5]=1
 
-
-
+indx_recomend2 = (USER_sim==1)&(USER==0)
+recomend2 = list(USER.index[indx_recomend2])
 
 
 
